@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SUS - SitiUfficialiSportivi</title>
+<meta name="description" content="SUS - SitiUfficialiSportivi">
+<style>
+:root{
+  --bg:#07111f;
+  --panel:#0d1b2d;
+  --panel2:#12243a;
+  --line:#233953;
+  --text:#eef5ff;
+  --muted:#9eb0c5;
+  --accent:#4da3ff;
+  --accent2:#77c4ff;
+  --danger:#ff6b6b;
+  --shadow:0 14px 35px rgba(0,0,0,.25);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  min-height:100vh;
+  background:linear-gradient(145deg,#07111f,#0a1728 55%,#07111f);
+  color:var(--text);
+  font-family:Arial,Helvetica,sans-serif;
+}
+button,input{font:inherit}
+button{cursor:pointer}
+.app{max-width:1180px;margin:auto;padding:28px 18px 60px}
+header{text-align:center;margin-bottom:28px}
+.logo{
+  display:inline-flex;align-items:center;gap:12px;
+  font-size:34px;font-weight:800;letter-spacing:.5px
+}
+.logo-mark{
+  width:46px;height:46px;border-radius:13px;
+  display:grid;place-items:center;
+  background:linear-gradient(135deg,#277ed0,#59b7ff);
+  box-shadow:0 8px 22px rgba(77,163,255,.25);
+}
+.subtitle{margin:8px 0 0;color:var(--muted);font-size:14px}
+.toolbar{
+  display:flex;gap:10px;align-items:center;justify-content:space-between;
+  margin-bottom:20px;flex-wrap:wrap
+}
+.search{
+  flex:1;min-width:240px;position:relative
+}
+.search input{
+  width:100%;padding:13px 42px 13px 15px;border-radius:12px;
+  border:1px solid var(--line);background:var(--panel);color:var(--text);
+  outline:none
+}
+.search input:focus{border-color:var(--accent)}
+.clear{
+  position:absolute;right:8px;top:50%;transform:translateY(-50%);
+  border:0;background:transparent;color:var(--muted);font-size:18px
+}
+.admin-btn,.back-btn{
+  border:1px solid var(--line);background:var(--panel);color:var(--text);
+  border-radius:12px;padding:12px 15px
+}
+.admin-btn:hover,.back-btn:hover{border-color:var(--accent)}
+.breadcrumb{
+  display:flex;align-items:center;gap:7px;flex-wrap:wrap;
+  margin-bottom:16px;padding:13px 15px;
+  background:#0b1a2b;border:1px solid #29435f;border-radius:13px;
+  color:#8fa6bd;font-size:14px;box-shadow:0 8px 20px rgba(0,0,0,.15)
+}
+.breadcrumb .crumb{
+  border:1px solid #315273;background:#12263c;color:#dcecff;
+  padding:7px 10px;border-radius:8px;font-weight:700
+}
+.breadcrumb .crumb:hover{border-color:var(--accent);background:#183653;color:white}
+.breadcrumb .separator{color:#62809d;font-size:18px}
+.breadcrumb .home{color:#9fd4ff}
+.content{
+  background:rgba(13,27,45,.88);border:1px solid var(--line);
+  border-radius:18px;box-shadow:var(--shadow);overflow:hidden
+}
+.content-head{
+  padding:20px 22px;border-bottom:1px solid var(--line);
+  display:flex;justify-content:space-between;align-items:center;gap:12px
+}
+.content-head h1{font-size:22px;margin:0}
+.content-head p{margin:5px 0 0;color:var(--muted);font-size:13px}
+.grid{
+  padding:20px;display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px
+}
+.card{
+  border:1px solid var(--line);background:var(--panel2);color:var(--text);
+  border-radius:14px;padding:17px;text-align:left;transition:.18s;
+}
+.card:hover{transform:translateY(-2px);border-color:#3c6691;background:#152b45}
+.card .emoji{font-size:26px;margin-bottom:9px}
+.card strong{display:block;font-size:16px}
+.card small{display:block;color:var(--muted);margin-top:5px}
+.site-wrap{padding:22px}
+.site{
+  border:1px solid var(--line);border-radius:16px;background:var(--panel2);
+  padding:22px;display:flex;justify-content:space-between;align-items:center;gap:18px
+}
+.site-info{display:flex;align-items:center;gap:15px}
+.site-icon{
+  width:48px;height:48px;border-radius:12px;background:#173450;
+  display:grid;place-items:center;font-size:22px
+}
+.site-info strong{display:block}.site-info span{display:block;color:var(--muted);font-size:13px;margin-top:5px}
+.visit{
+  display:inline-flex;text-decoration:none;border-radius:11px;padding:11px 15px;
+  background:#267dc9;color:white;font-weight:700;white-space:nowrap
+}
+.visit:hover{background:#328fdc}
+.empty{padding:45px 20px;text-align:center;color:var(--muted)}
+.hidden{display:none!important}
+
+/* Admin */
+.admin-panel{margin-top:20px;border:1px solid var(--line);border-radius:18px;background:var(--panel);padding:20px}
+.admin-panel h2{margin:0 0 15px;font-size:18px}
+.form-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.form-grid input,.form-grid select{
+  width:100%;padding:11px 12px;border-radius:10px;border:1px solid var(--line);
+  background:#091727;color:var(--text);outline:none
+}
+.form-grid input:focus,.form-grid select:focus{border-color:var(--accent)}
+.form-actions{display:flex;gap:9px;margin-top:12px;flex-wrap:wrap}
+.primary,.secondary,.danger{
+  border:0;border-radius:10px;padding:10px 13px;color:white
+}
+.primary{background:#267dc9}.secondary{background:#29445f}.danger{background:#9d3e46}
+.admin-note{color:var(--muted);font-size:12px;margin-top:12px;line-height:1.5}
+.admin-list{margin-top:18px;display:grid;gap:8px}
+.admin-row{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  padding:12px;border:1px solid var(--line);border-radius:11px;background:#0a1829
+}
+.admin-row .meta{min-width:0}.admin-row strong{display:block}.admin-row span{font-size:12px;color:var(--muted)}
+.admin-row .actions{display:flex;gap:6px}
+.admin-row button{border:1px solid var(--line);background:#12263c;color:var(--text);border-radius:8px;padding:7px 9px}
+footer{text-align:center;color:#667b93;font-size:11px;margin-top:24px}
+
+@media(max-width:650px){
+  .app{padding:20px 12px 45px}
+  .logo{font-size:28px}.logo-mark{width:40px;height:40px}
+  .form-grid{grid-template-columns:1fr}
+  .site{align-items:flex-start;flex-direction:column}
+  .visit{width:100%;justify-content:center}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="logo"><div class="logo-mark">S</div><div>SUS</div></div>
+    <p class="subtitle">SitiUfficialiSportivi</p>
+  </header>
+
+  <div class="toolbar">
+    <div class="search">
+      <input id="search" type="search" placeholder="Cerca sport, nazione, circuito o torneo..." autocomplete="off">
+      <button class="clear" id="clearSearch" title="Cancella">×</button>
+    </div>
+    <button class="admin-btn" id="adminBtn">🔐 Modifica</button>
+  </div>
+
+  <div id="breadcrumb" class="breadcrumb"></div>
+
+  <main class="content">
+    <div class="content-head">
+      <div>
+        <h1 id="title">Sport</h1>
+        <p id="description">Scegli uno sport</p>
+      </div>
+      <button class="back-btn hidden" id="backBtn">← Indietro</button>
+    </div>
+    <div id="cards" class="grid"></div>
+    <div id="siteView" class="site-wrap hidden"></div>
+  </main>
+
+  <section id="adminPanel" class="admin-panel hidden">
+    <h2>🔐 Area modifica</h2>
+    <div class="form-grid">
+      <input id="aName" placeholder="Nome della nuova cartella">
+      <input id="aEmoji" placeholder="Emoji (facoltativa)">
+      <input id="aUrl" placeholder="URL del sito ufficiale (solo per il torneo)">
+      <input id="aLocation" readonly placeholder="Percorso corrente">
+    </div>
+    <div class="form-actions">
+      <button class="primary" id="addFolderBtn">+ Aggiungi sottocartella</button>
+      <button class="primary" id="addSportBtn">+ Aggiungi sport</button>
+      <button class="secondary" id="closeAdmin">Chiudi</button>
+    </div>
+    <div class="admin-note">
+      Sei tu a decidere dove aggiungere ogni elemento: SUS usa automaticamente il percorso in cui ti trovi.
+      Le sottocartelle seguono sempre la struttura Sport → Nazione/Circuito → Torneo → Sito ufficiale.
+    </div>
+    <div id="adminList" class="admin-list"></div>
+  </section>
+
+  <footer>SUS · SitiUfficialiSportivi</footer>
+</div>
+
+<script>
+const defaultData = [
+  {id:"calcio",type:"sport",name:"Calcio",emoji:"⚽"},
+  {id:"tennis",type:"sport",name:"Tennis",emoji:"🎾"},
+  {id:"basket",type:"sport",name:"Basket",emoji:"🏀"},
+  {id:"volley",type:"sport",name:"Pallavolo",emoji:"🏐"},
+  {id:"hockey",type:"sport",name:"Hockey",emoji:"🏒"},
+  {id:"formula1",type:"sport",name:"Formula 1",emoji:"🏎️"},
+
+  {id:"italia",type:"region",parent:"calcio",name:"Italia",emoji:"🇮🇹"},
+  {id:"spagna",type:"region",parent:"calcio",name:"Spagna",emoji:"🇪🇸"},
+  {id:"inghilterra",type:"region",parent:"calcio",name:"Inghilterra",emoji:"🏴"},
+  {id:"germania",type:"region",parent:"calcio",name:"Germania",emoji:"🇩🇪"},
+  {id:"francia",type:"region",parent:"calcio",name:"Francia",emoji:"🇫🇷"},
+  {id:"uefa",type:"region",parent:"calcio",name:"UEFA",emoji:"🌍"},
+  {id:"atp",type:"region",parent:"tennis",name:"ATP",emoji:"🌍"},
+  {id:"wta",type:"region",parent:"tennis",name:"WTA",emoji:"🌍"},
+  {id:"nba",type:"region",parent:"basket",name:"NBA",emoji:"🇺🇸"},
+  {id:"fivb",type:"region",parent:"volley",name:"FIVB",emoji:"🌍"},
+  {id:"nhl",type:"region",parent:"hockey",name:"NHL",emoji:"🇺🇸"},
+  {id:"f1-circuit",type:"region",parent:"formula1",name:"Circuito internazionale",emoji:"🌍"},
+
+  {id:"serie-a",type:"tournament",parent:"italia",name:"Serie A",emoji:"🏆",url:"https://www.legaseriea.it/"},
+  {id:"serie-b",type:"tournament",parent:"italia",name:"Serie B",emoji:"🏆",url:"https://www.legab.it/"},
+  {id:"coppa-italia",type:"tournament",parent:"italia",name:"Coppa Italia",emoji:"🏆",url:"https://www.legaseriea.it/"},
+  {id:"laliga",type:"tournament",parent:"spagna",name:"LaLiga",emoji:"🏆",url:"https://www.laliga.com/"},
+  {id:"premier",type:"tournament",parent:"inghilterra",name:"Premier League",emoji:"🏆",url:"https://www.premierleague.com/"},
+  {id:"bundesliga",type:"tournament",parent:"germania",name:"Bundesliga",emoji:"🏆",url:"https://www.bundesliga.com/"},
+  {id:"ligue1",type:"tournament",parent:"francia",name:"Ligue 1",emoji:"🏆",url:"https://www.ligue1.com/"},
+  {id:"champions",type:"tournament",parent:"uefa",name:"Champions League",emoji:"🏆",url:"https://www.uefa.com/uefachampionsleague/"},
+  {id:"atp-tour",type:"tournament",parent:"atp",name:"ATP Tour",emoji:"🏆",url:"https://www.atptour.com/"},
+  {id:"wta-tour",type:"tournament",parent:"wta",name:"WTA",emoji:"🏆",url:"https://www.wtatennis.com/"},
+  {id:"nba-league",type:"tournament",parent:"nba",name:"NBA",emoji:"🏆",url:"https://www.nba.com/"},
+  {id:"vnl",type:"tournament",parent:"fivb",name:"Volleyball Nations League",emoji:"🏆",url:"https://en.volleyballworld.com/volleyball/competitions/volleyball-nations-league/"},
+  {id:"nhl-league",type:"tournament",parent:"nhl",name:"NHL",emoji:"🏆",url:"https://www.nhl.com/"},
+  {id:"formula1-world",type:"tournament",parent:"f1-circuit",name:"Formula 1",emoji:"🏆",url:"https://www.formula1.com/"}
+];
+
+let data = JSON.parse(localStorage.getItem("sus_data") || "null") || structuredClone(defaultData);
+let path = [];
+let adminOpen = false;
+let searchTimer;
+
+const $ = id => document.getElementById(id);
+
+function children(parentId, type){
+  return data.filter(x => x.parent === parentId && x.type === type);
+}
+function get(id){ return data.find(x => x.id === id); }
+
+function render(){
+  const search = $("search").value.trim().toLowerCase();
+  if(search){
+    renderSearch(search);
+    return;
+  }
+  const current = path.length ? get(path[path.length-1]) : null;
+  $("breadcrumb").innerHTML = `<button class="crumb home" data-bc="-1">🏠 SUS</button>` +
+    (path.length ? `<span class="separator">›</span>` + path.map((id,i)=>{
+      const item=get(id);
+      return `<button class="crumb" data-bc="${i}">${item.emoji||""} ${escapeHtml(item.name)}</button>${i<path.length-1?'<span class="separator">›</span>':''}`;
+    }).join("") : "");
+  $("backBtn").classList.toggle("hidden", !path.length);
+
+  if(!current){
+    $("title").textContent="Sport";
+    $("description").textContent="Scegli uno sport";
+    $("siteView").classList.add("hidden");
+    $("cards").classList.remove("hidden");
+    renderCards(data.filter(x=>x.type==="sport"));
+    return;
+  }
+
+  if(current.type==="sport"){
+    $("title").textContent=current.emoji+" "+current.name;
+    $("description").textContent="Scegli una nazione o un circuito";
+    renderCards(children(current.id,"region"));
+  }else if(current.type==="region"){
+    $("title").textContent=current.emoji+" "+current.name;
+    $("description").textContent="Scegli un torneo";
+    renderCards(children(current.id,"tournament"));
+  }
+  $("siteView").classList.add("hidden");
+  $("cards").classList.remove("hidden");
+}
+
+function renderCards(items){
+  $("cards").innerHTML = items.length ? items.map(x=>`
+    <button class="card" data-id="${x.id}">
+      <div class="emoji">${x.emoji||"•"}</div>
+      <strong>${escapeHtml(x.name)}</strong>
+      <small>${x.type==="sport"?"Sport":x.type==="region"?"Nazione / Circuito":"Torneo"}</small>
+    </button>`).join("") : `<div class="empty">Nessun elemento presente.</div>`;
+}
+
+function renderSearch(q){
+  $("breadcrumb").innerHTML="";
+  $("backBtn").classList.remove("hidden");
+  $("title").textContent="Risultati ricerca";
+  $("description").textContent="Sport, nazioni/circuiti e tornei";
+  $("siteView").classList.add("hidden");
+  $("cards").classList.remove("hidden");
+  const items=data.filter(x=>x.name.toLowerCase().includes(q));
+  $("cards").innerHTML=items.length ? items.map(x=>`
+    <button class="card" data-id="${x.id}">
+      <div class="emoji">${x.emoji||"•"}</div>
+      <strong>${escapeHtml(x.name)}</strong>
+      <small>${labelType(x.type)}</small>
+    </button>`).join("") : `<div class="empty">Nessun risultato per “${escapeHtml(q)}”.</div>`;
+}
+
+function openItem(id){
+  const item=get(id);
+  if(!item) return;
+  if(item.type==="tournament"){
+    path=[item.parent,item.id];
+    showSite(item);
+  }else{
+    path=[...path.filter(x=>x!==id),id];
+    render();
+  }
+}
+function showSite(item){
+  $("breadcrumb").innerHTML=`<button class="crumb home" data-bc="-1">🏠 SUS</button><span class="separator">›</span>`+
+    path.map((id,i)=>{
+      const x=get(id);
+      return `<button class="crumb" data-bc="${i}">${x.emoji||""} ${escapeHtml(x.name)}</button>${i<path.length-1?'<span class="separator">›</span>':''}`;
+    }).join("");
+  $("backBtn").classList.remove("hidden");
+  $("title").textContent=item.emoji+" "+item.name;
+  $("description").textContent="Sito ufficiale";
+  $("cards").classList.add("hidden");
+  $("siteView").classList.remove("hidden");
+  $("siteView").innerHTML=`
+    <div class="site">
+      <div class="site-info">
+        <div class="site-icon">🌐</div>
+        <div><strong>Sito ufficiale</strong><span>${escapeHtml(item.url||"Link non disponibile")}</span></div>
+      </div>
+      ${item.url ? `<a class="visit" href="${safeUrl(item.url)}" target="_blank" rel="noopener noreferrer">Apri sito ↗</a>` : ""}
+    </div>`;
+}
+
+function labelType(t){return t==="sport"?"Sport":t==="region"?"Nazione / Circuito":"Torneo"}
+
+function save(){
+  localStorage.setItem("sus_data",JSON.stringify(data));
+}
+function slug(s){
+  return s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"") || "elemento";
+}
+function uniqueId(base){
+  let id=slug(base), n=2;
+  while(get(id)) id=slug(base)+"-"+n++;
+  return id;
+}
+function escapeHtml(s){
+  return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
+}
+function safeUrl(url){
+  try{
+    const u=new URL(url);
+    return ["http:","https:"].includes(u.protocol)?u.href:"#";
+  }catch{return "#";}
+}
+
+function updateAdminLocation(){
+  const labels = path.map(id => {
+    const x=get(id);
+    return x ? `${x.emoji||""} ${x.name}` : "";
+  }).filter(Boolean);
+  $("aLocation").value = "🏠 SUS" + (labels.length ? " › " + labels.join(" › ") : "");
+  $("aUrl").disabled = !(path.length && get(path[path.length-1])?.type === "region");
+  $("aUrl").placeholder = $("aUrl").disabled
+    ? "URL del sito ufficiale (solo per il torneo)"
+    : "URL del sito ufficiale";
+}
+function renderAdminList(){
+  $("adminList").innerHTML=data.map(x=>`
+    <div class="admin-row">
+      <div class="meta"><strong>${x.emoji||""} ${escapeHtml(x.name)}</strong><span>${labelType(x.type)}${x.parent?" · "+escapeHtml(get(x.parent)?.name||""):""}</span></div>
+      <div class="actions"><button data-edit="${x.id}">✏</button><button data-delete="${x.id}">🗑</button></div>
+    </div>`).join("");
+}
+
+$("cards").addEventListener("click",e=>{
+  const b=e.target.closest("[data-id]");
+  if(b) openItem(b.dataset.id);
+});
+$("breadcrumb").addEventListener("click",e=>{
+  const b=e.target.closest("[data-bc]");
+  if(!b)return;
+  const i=Number(b.dataset.bc);
+  if(i===-1){path=[]; $("search").value=""; render(); return;}
+  path=path.slice(0,i+1);
+  const item=get(path[path.length-1]);
+  item.type==="tournament"?showSite(item):render();
+});
+$("backBtn").onclick=()=>{
+  if($("search").value){$("search").value="";render();return}
+  path.pop();render();
+};
+$("search").oninput=()=>{clearTimeout(searchTimer);searchTimer=setTimeout(render,80)};
+$("clearSearch").onclick=()=>{$("search").value="";render();$("search").focus()};
+$("adminBtn").onclick=()=>{
+  adminOpen=!adminOpen;
+  $("adminPanel").classList.toggle("hidden",!adminOpen);
+  if(adminOpen){updateAdminLocation();renderAdminList();$("adminPanel").scrollIntoView({behavior:"smooth",block:"start"})}
+};
+$("closeAdmin").onclick=()=>{$("adminPanel").classList.add("hidden");adminOpen=false};
+function addItem(type){
+  const name=$("aName").value.trim();
+  if(!name){alert("Inserisci il nome.");return}
+
+  const item={
+    id:uniqueId(name),
+    type,
+    name,
+    emoji:$("aEmoji").value.trim() || (type==="tournament"?"🏆":type==="region"?"🌍":"🏅")
+  };
+
+  if(type==="sport"){
+    data.push(item);
+  }else{
+    const parentId=path[path.length-1];
+    const parent=get(parentId);
+    if(!parent){
+      alert("Per creare una sottocartella entra prima nello sport o nella nazione/circuito corretto.");
+      return;
+    }
+    if(type==="region" && parent.type!=="sport"){
+      alert("Dentro uno sport puoi creare solo Nazione / Circuito.");
+      return;
+    }
+    if(type==="tournament" && parent.type!=="region"){
+      alert("Dentro una Nazione / Circuito puoi creare solo un Torneo.");
+      return;
+    }
+    item.parent=parentId;
+
+    if(type==="tournament"){
+      const url=$("aUrl").value.trim();
+      if(!url){alert("Inserisci il link del sito ufficiale.");return}
+      if(safeUrl(url)==="#"){alert("Inserisci un URL valido che inizi con http:// o https://.");return}
+      item.url=url;
+    }
+    data.push(item);
+  }
+
+  save();
+  renderAdminList();
+  render();
+  updateAdminLocation();
+  $("aName").value="";
+  $("aEmoji").value="";
+  $("aUrl").value="";
+  alert("Sottocartella aggiunta.");
+}
+
+$("addFolderBtn").onclick=()=>{
+  if(!path.length){
+    alert("Sei nella cartella principale SUS. Qui puoi aggiungere solo uno Sport.");
+    return;
+  }
+  const parent=get(path[path.length-1]);
+  if(parent.type==="sport") addItem("region");
+  else if(parent.type==="region") addItem("tournament");
+  else alert("Un Torneo contiene solo il suo link ufficiale.");
+};
+
+$("addSportBtn").onclick=()=>addItem("sport");
+
+$("adminList").addEventListener("click",e=>{
+  const edit=e.target.closest("[data-edit]")?.dataset.edit;
+  const del=e.target.closest("[data-delete]")?.dataset.delete;
+  if(del){
+    const item=get(del);
+    if(!item)return;
+    const descendants=data.filter(x=>x.parent===del);
+    if(!confirm(`Eliminare "${item.name}"${descendants.length?" e i suoi elementi collegati":""}?`))return;
+    const ids=new Set([del,...descendants.map(x=>x.id)]);
+    data=data.filter(x=>!ids.has(x.id)); save(); path=path.filter(x=>!ids.has(x)); renderAdminList(); render();
+  }
+  if(edit){
+    const item=get(edit);
+    const name=prompt("Nome:",item.name);
+    if(name===null)return;
+    item.name=name.trim()||item.name;
+    const emoji=prompt("Emoji:",item.emoji||"");
+    if(emoji!==null)item.emoji=emoji.trim();
+    if(item.type==="tournament"){
+      const url=prompt("URL sito ufficiale:",item.url||"");
+      if(url!==null)item.url=url.trim();
+    }
+    save();renderAdminList();render();
+  }
+});
+
+render();
+</script>
+</body>
+</html>
