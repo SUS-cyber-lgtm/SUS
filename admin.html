@@ -5,63 +5,222 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>SUS Admin</title>
 <style>
-*{box-sizing:border-box}body{margin:0;background:#09111d;color:#e8f1fb;font-family:Arial,sans-serif}
-.wrap{max-width:1050px;margin:auto;padding:28px 18px}h1{margin:0 0 6px}.sub{color:#91a7bd;margin-bottom:22px}
-.panel{background:#101d2d;border:1px solid #29415c;border-radius:16px;padding:20px;margin-bottom:18px}
-.path{display:flex;gap:7px;align-items:center;flex-wrap:wrap;background:#0b1725;border:1px solid #29415c;padding:12px;border-radius:12px;margin-bottom:18px}
-.path button{background:#142941;color:#dff1ff;border:1px solid #315273;border-radius:8px;padding:7px 10px;cursor:pointer;font-weight:700}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px}
-button,input{font:inherit}.action{padding:11px 14px;border:0;border-radius:9px;cursor:pointer;font-weight:700}
-.add{background:#1d8b5a;color:#fff}.secondary{background:#20344a;color:#e5f1ff}.danger{background:#7c2930;color:#fff}
-input{width:100%;padding:11px 12px;border-radius:9px;border:1px solid #35506c;background:#0b1725;color:#fff}
-.list{display:grid;gap:9px;margin-top:15px}.row{display:flex;align-items:center;gap:10px;background:#0b1725;border:1px solid #263f58;border-radius:11px;padding:11px}
-.row .name{flex:1;font-weight:700}.row small,.note{color:#8197ad}.empty{padding:10px 0}
+*{box-sizing:border-box}
+body{margin:0;background:#07111f;color:#eef5ff;font-family:Arial,Helvetica,sans-serif}
+.wrap{max-width:1150px;margin:auto;padding:28px 18px 60px}
+h1{margin:0 0 5px} .sub{color:#9eb0c5;margin-bottom:22px}
+.panel{background:#0d1b2d;border:1px solid #233953;border-radius:16px;padding:20px;margin-bottom:18px}
+.path{display:flex;gap:7px;align-items:center;flex-wrap:wrap;background:#081522;border:1px solid #29415c;padding:12px;border-radius:12px}
+.path button{background:#142941;color:#e8f4ff;border:1px solid #315273;border-radius:8px;padding:7px 10px;cursor:pointer;font-weight:700}
+.toolbar,.actions{display:flex;gap:8px;flex-wrap:wrap}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
+input{width:100%;padding:12px;border-radius:9px;border:1px solid #35506c;background:#081522;color:#fff;font:inherit}
+button{font:inherit;cursor:pointer}
+.btn{padding:10px 14px;border:0;border-radius:9px;font-weight:700}
+.green{background:#198754;color:white} .blue{background:#24557d;color:white}
+.red{background:#812c35;color:white} .gray{background:#20344a;color:white}
+.list{display:grid;gap:9px;margin-top:14px}
+.row{display:flex;align-items:center;gap:10px;background:#081522;border:1px solid #263f58;border-radius:11px;padding:11px}
+.name{flex:1;font-weight:700} small,.note{color:#8ea5ba}
+.hidden{display:none}
+.badge{padding:4px 8px;border:1px solid #315273;border-radius:999px;color:#a9c8df;font-size:12px}
+a{color:#8ed0ff}
 </style>
 </head>
 <body>
 <div class="wrap">
-<h1>🔐 SUS ADMIN</h1><div class="sub">Gestione di SitiUfficialiSportivi</div>
-<div class="panel"><div class="path" id="path"></div><div id="actions" class="grid"></div></div>
-<div class="panel"><h2 id="title">🏠 Sport</h2><div id="list" class="list"></div></div>
-<div class="panel"><h2>Aggiungi</h2><div class="grid">
-<input id="name" placeholder="Nome"><input id="emoji" placeholder="Emoji (facoltativa)">
-<input id="url" placeholder="Link sito ufficiale (solo torneo)">
-</div><br><button class="action add" id="add">＋ Aggiungi</button>
-<p class="note">Il pannello segue automaticamente il percorso corrente. Struttura: Sport → Nazione/Circuito → Torneo → Sito ufficiale.</p></div>
-<div class="panel note"><b>Nota:</b> questa versione salva i dati nel browser. Non contiene password o token GitHub.</div>
+<h1>🔐 SUS ADMIN</h1>
+<div class="sub">Pannello di gestione di SitiUfficialiSportivi</div>
+
+<div class="panel">
+  <div class="path" id="path"></div>
+  <br>
+  <div class="toolbar">
+    <button class="btn gray" id="back">← Indietro</button>
+    <button class="btn blue" id="openPublic">🌐 Apri SUS online</button>
+    <button class="btn blue" id="export">⬇ Esporta dati</button>
+    <button class="btn gray" id="reset">↺ Ripristina dati iniziali</button>
+  </div>
 </div>
+
+<div class="panel">
+<h2 id="title">🏠 Sport</h2>
+<div id="list" class="list"></div>
+</div>
+
+<div class="panel">
+<h2>Aggiungi nella cartella corrente</h2>
+<div class="grid">
+<input id="name" placeholder="Nome">
+<input id="emoji" placeholder="Emoji facoltativa">
+<input id="url" placeholder="Link sito ufficiale — solo per un torneo">
+</div>
+<br>
+<div class="toolbar">
+<button class="btn green" id="add">＋ Aggiungi</button>
+</div>
+<p class="note">La struttura è automatica: Sport → Nazione/Circuito → Torneo → Link del sito. Non esiste il campo “Genitore”.</p>
+</div>
+
+<div class="panel note">
+<b>Stato:</b> questo pannello usa la struttura reale attualmente presente nel tuo <code>index.html</code>.
+Le modifiche vengono salvate nel browser del pannello. <b>Non vengono ancora pubblicate sul sito pubblico</b>.
+Non inserire password o token GitHub in questo file.
+</div>
+</div>
+
 <script>
-const KEY="SUS_ADMIN_DATA_V1";
-let data=JSON.parse(localStorage.getItem(KEY)||"null")||[
-{id:"calcio",type:"sport",name:"Calcio",emoji:"⚽"},
-{id:"italia",type:"region",name:"Italia",emoji:"🇮🇹",parent:"calcio"},
-{id:"serie-a",type:"tournament",name:"Serie A",emoji:"🏆",parent:"italia",url:"https://www.legaseriea.it/"}
-],path=[];
+const defaultData = [
+  {id:"calcio",type:"sport",name:"Calcio",emoji:"⚽"},
+  {id:"tennis",type:"sport",name:"Tennis",emoji:"🎾"},
+  {id:"basket",type:"sport",name:"Basket",emoji:"🏀"},
+  {id:"volley",type:"sport",name:"Pallavolo",emoji:"🏐"},
+  {id:"hockey",type:"sport",name:"Hockey",emoji:"🏒"},
+  {id:"formula1",type:"sport",name:"Formula 1",emoji:"🏎️"},
+
+  {id:"italia",type:"region",parent:"calcio",name:"Italia",emoji:"🇮🇹"},
+  {id:"spagna",type:"region",parent:"calcio",name:"Spagna",emoji:"🇪🇸"},
+  {id:"inghilterra",type:"region",parent:"calcio",name:"Inghilterra",emoji:"🏴"},
+  {id:"germania",type:"region",parent:"calcio",name:"Germania",emoji:"🇩🇪"},
+  {id:"francia",type:"region",parent:"calcio",name:"Francia",emoji:"🇫🇷"},
+  {id:"uefa",type:"region",parent:"calcio",name:"UEFA",emoji:"🌍"},
+  {id:"atp",type:"region",parent:"tennis",name:"ATP",emoji:"🌍"},
+  {id:"wta",type:"region",parent:"tennis",name:"WTA",emoji:"🌍"},
+  {id:"nba",type:"region",parent:"basket",name:"NBA",emoji:"🇺🇸"},
+  {id:"fivb",type:"region",parent:"volley",name:"FIVB",emoji:"🌍"},
+  {id:"nhl",type:"region",parent:"hockey",name:"NHL",emoji:"🇺🇸"},
+  {id:"f1-circuit",type:"region",parent:"formula1",name:"Circuito internazionale",emoji:"🌍"},
+
+  {id:"serie-a",type:"tournament",parent:"italia",name:"Serie A",emoji:"🏆",url:"https://www.legaseriea.it/"},
+  {id:"serie-b",type:"tournament",parent:"italia",name:"Serie B",emoji:"🏆",url:"https://www.legab.it/"},
+  {id:"coppa-italia",type:"tournament",parent:"italia",name:"Coppa Italia",emoji:"🏆",url:"https://www.legaseriea.it/"},
+  {id:"laliga",type:"tournament",parent:"spagna",name:"LaLiga",emoji:"🏆",url:"https://www.laliga.com/"},
+  {id:"premier",type:"tournament",parent:"inghilterra",name:"Premier League",emoji:"🏆",url:"https://www.premierleague.com/"},
+  {id:"bundesliga",type:"tournament",parent:"germania",name:"Bundesliga",emoji:"🏆",url:"https://www.bundesliga.com/"},
+  {id:"ligue1",type:"tournament",parent:"francia",name:"Ligue 1",emoji:"🏆",url:"https://www.ligue1.com/"},
+  {id:"champions",type:"tournament",parent:"uefa",name:"Champions League",emoji:"🏆",url:"https://www.uefa.com/uefachampionsleague/"},
+  {id:"atp-tour",type:"tournament",parent:"atp",name:"ATP Tour",emoji:"🏆",url:"https://www.atptour.com/"},
+  {id:"wta-tour",type:"tournament",parent:"wta",name:"WTA",emoji:"🏆",url:"https://www.wtatennis.com/"},
+  {id:"nba-league",type:"tournament",parent:"nba",name:"NBA",emoji:"🏆",url:"https://www.nba.com/"},
+  {id:"vnl",type:"tournament",parent:"fivb",name:"Volleyball Nations League",emoji:"🏆",url:"https://en.volleyballworld.com/volleyball/competitions/volleyball-nations-league/"},
+  {id:"nhl-league",type:"tournament",parent:"nhl",name:"NHL",emoji:"🏆",url:"https://www.nhl.com/"},
+  {id:"formula1-world",type:"tournament",parent:"f1-circuit",name:"Formula 1",emoji:"🏆",url:"https://www.formula1.com/"}
+];
+const KEY="sus_admin_real_data_v1";
+let data=JSON.parse(localStorage.getItem(KEY)||"null") || structuredClone(defaultData);
+let path=[];
+
 function save(){localStorage.setItem(KEY,JSON.stringify(data))}
 function get(id){return data.find(x=>x.id===id)}
-function children(parent){return data.filter(x=>parent?x.parent===parent:!x.parent)}
-function uid(n){return n.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")+"-"+Date.now()}
+function children(parent){return data.filter(x=>parent ? x.parent===parent : !x.parent)}
 function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
+function typeLabel(t){return t==="sport"?"Sport":t==="region"?"Nazione / Circuito":"Torneo"}
+function slug(s){return s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")||"elemento"}
+function uniqueId(name){let id=slug(name),n=2;while(get(id))id=slug(name)+"-"+n++;return id}
 function current(){return path.length?get(path[path.length-1]):null}
-function render(){
-let p=document.getElementById("path");
-p.innerHTML='<button onclick="goHome()">🏠 SUS</button>'+(path.length?'<span>›</span>':'')+
-path.map((id,i)=>{let x=get(id);return '<button onclick="go('+i+')">'+esc(x.emoji||"")+' '+esc(x.name)+'</button>'+(i<path.length-1?'<span>›</span>':'')}).join("");
-let cur=current(),kids=children(cur?.id);
-document.getElementById("title").textContent=cur?(cur.emoji||"")+" "+cur.name:"🏠 Sport";
-document.getElementById("actions").innerHTML='<span class="note">'+(!cur?"Qui puoi creare gli Sport.":cur.type==="sport"?"Qui puoi creare Nazione / Circuito.":cur.type==="region"?"Qui puoi creare Tornei.":"Questo è il livello del sito ufficiale.")+'</span>';
-let list=document.getElementById("list");
-list.innerHTML=kids.length?kids.map(x=>'<div class="row"><div class="name">'+esc(x.emoji||"")+' '+esc(x.name)+'</div><small>'+({sport:"Sport",region:"Nazione / Circuito",tournament:"Torneo"}[x.type])+'</small><button class="action secondary" onclick="openItem(\''+x.id+'\')">Apri</button><button class="action secondary" onclick="editItem(\''+x.id+'\')">Modifica</button><button class="action danger" onclick="deleteItem(\''+x.id+'\')">Elimina</button></div>').join(""):'<div class="empty">Nessuna voce in questa cartella.</div>';
+
+function renderPath(){
+  const el=document.getElementById("path");
+  el.innerHTML='<button onclick="home()">🏠 SUS</button>'+
+    (path.length?'<span>›</span>':'')+
+    path.map((id,i)=>{
+      const x=get(id);
+      return '<button onclick="go('+i+')">'+esc(x.emoji||"")+' '+esc(x.name)+'</button>'+
+        (i<path.length-1?'<span>›</span>':'');
+    }).join("");
 }
-function goHome(){path=[];render()} function go(i){path=path.slice(0,i+1);render()}
-function openItem(id){let x=get(id);if(x.type==="tournament"){if(x.url)window.open(x.url,"_blank");else alert("Questo torneo non ha ancora un sito ufficiale.");}else{path.push(id);render()}}
-function editItem(id){let x=get(id),n=prompt("Nome:",x.name);if(n===null)return;if(!n.trim())return alert("Nome non valido.");x.name=n.trim();let e=prompt("Emoji:",x.emoji||"");if(e!==null)x.emoji=e.trim();if(x.type==="tournament"){let u=prompt("Link sito ufficiale:",x.url||"");if(u!==null)x.url=u.trim()}save();render()}
-function deleteItem(id){let x=get(id);if(!confirm('Eliminare "'+x.name+'"?'))return;let remove=new Set([id]),changed=true;while(changed){changed=false;data.forEach(y=>{if(y.parent&&remove.has(y.parent)&&!remove.has(y.id)){remove.add(y.id);changed=true}})}data=data.filter(y=>!remove.has(y.id));path=path.filter(i=>!remove.has(i));save();render()}
+
+function render(){
+  renderPath();
+  const cur=current();
+  document.getElementById("title").textContent=cur?(cur.emoji||"")+" "+cur.name:"🏠 Sport";
+  const items=children(cur?.id);
+  document.getElementById("list").innerHTML=items.length ? items.map(x=>`
+    <div class="row">
+      <div class="name">${esc(x.emoji||"")} ${esc(x.name)}</div>
+      <span class="badge">${typeLabel(x.type)}</span>
+      <button class="btn blue" onclick="openItem('${x.id}')">${x.type==="tournament"?"🌐 Apri sito":"📁 Apri"}</button>
+      <button class="btn gray" onclick="editItem('${x.id}')">✏ Modifica</button>
+      <button class="btn red" onclick="deleteItem('${x.id}')">🗑 Elimina</button>
+    </div>`).join("") : '<div class="note">Nessun elemento in questa cartella.</div>';
+
+  const add=document.getElementById("add");
+  add.textContent=!cur?"＋ Aggiungi Sport":cur.type==="sport"?"＋ Aggiungi Nazione / Circuito":cur.type==="region"?"＋ Aggiungi Torneo":"＋ Aggiungi";
+  document.getElementById("url").disabled=!(cur && cur.type==="region");
+}
+
+function home(){path=[];render()}
+function go(i){path=path.slice(0,i+1);render()}
+function openItem(id){
+  const x=get(id);
+  if(x.type==="tournament"){if(x.url)window.open(x.url,"_blank");else alert("Link non presente.");}
+  else{path.push(id);render()}
+}
+
+function editItem(id){
+  const x=get(id);
+  const n=prompt("Nome:",x.name);
+  if(n===null)return;
+  if(!n.trim())return alert("Nome non valido.");
+  x.name=n.trim();
+  const e=prompt("Emoji:",x.emoji||"");
+  if(e!==null)x.emoji=e.trim();
+  if(x.type==="tournament"){
+    const u=prompt("Link sito ufficiale:",x.url||"");
+    if(u===null)return;
+    if(u && !/^https?:\/\//i.test(u))return alert("Il link deve iniziare con http:// o https://");
+    x.url=u.trim();
+  }
+  save();render();
+}
+
+function deleteItem(id){
+  const x=get(id);
+  const all=new Set([id]); let again=true;
+  while(again){again=false;data.forEach(y=>{if(y.parent&&all.has(y.parent)&&!all.has(y.id)){all.add(y.id);again=true}})}
+  if(!confirm('Eliminare "'+x.name+'"'+(all.size>1?" e le sue sottocartelle":"")+"?"))return;
+  data=data.filter(y=>!all.has(y.id));
+  path=path.filter(id=>!all.has(id));
+  save();render();
+}
+
 document.getElementById("add").onclick=()=>{
-let name=document.getElementById("name").value.trim(),emoji=document.getElementById("emoji").value.trim(),url=document.getElementById("url").value.trim(),cur=current(),type,parent=null;
-if(!name)return alert("Inserisci il nome.");
-if(!cur)type="sport";else if(cur.type==="sport"){type="region";parent=cur.id}else if(cur.type==="region"){type="tournament";parent=cur.id;if(!url)return alert("Inserisci il link del sito ufficiale.");if(!/^https?:\/\//i.test(url))return alert("Il link deve iniziare con http:// o https://")}else return alert("Un torneo contiene solo il suo sito ufficiale.");
-data.push({id:uid(name),type,name,emoji:emoji||(type==="sport"?"⚽":type==="region"?"🌍":"🏆"),...(parent?{parent}:{}),...(type==="tournament"?{url}:{})});save();["name","emoji","url"].forEach(i=>document.getElementById(i).value="");render()};
+  const name=document.getElementById("name").value.trim();
+  const emoji=document.getElementById("emoji").value.trim();
+  const url=document.getElementById("url").value.trim();
+  if(!name)return alert("Inserisci il nome.");
+  const cur=current();
+  let type,parent=null;
+  if(!cur) type="sport";
+  else if(cur.type==="sport"){type="region";parent=cur.id}
+  else if(cur.type==="region"){type="tournament";parent=cur.id;
+    if(!url)return alert("Inserisci il link del sito ufficiale.");
+    if(!/^https?:\/\//i.test(url))return alert("Il link deve iniziare con http:// o https://");
+  }
+  else return alert("Un torneo contiene soltanto il link del sito ufficiale.");
+
+  data.push({id:uniqueId(name),type,name,emoji:emoji||(type==="sport"?"⚽":type==="region"?"🌍":"🏆"),...(parent?{parent}:{}),...(type==="tournament"?{url}:{})});
+  save();
+  document.getElementById("name").value="";
+  document.getElementById("emoji").value="";
+  document.getElementById("url").value="";
+  render();
+};
+
+document.getElementById("back").onclick=()=>{if(path.length){path.pop();render()}else alert("Sei già nella home SUS.")};
+document.getElementById("openPublic").onclick=()=>window.open("./index.html","_blank");
+
+document.getElementById("export").onclick=()=>{
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
+  const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="sus-data.json";a.click();
+  URL.revokeObjectURL(a.href);
+};
+
+document.getElementById("reset").onclick=()=>{
+  if(!confirm("Ripristinare i dati iniziali di SUS? Le modifiche locali del pannello verranno cancellate."))return;
+  data=structuredClone(defaultData);save();path=[];render();
+};
 render();
 </script>
-</body></html>
+</body>
+</html>
